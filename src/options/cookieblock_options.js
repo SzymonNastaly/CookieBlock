@@ -462,7 +462,9 @@ histCheckbox.addEventListener("click", (ev) => {
 // pause checkbox
 pauseCheckbox.addEventListener("click", (ev) => {
     setStorageValue( pauseCheckbox.checked, chrome.storage.local, "cblk_pause");
-    chrome.browserAction.setIcon(pauseCheckbox.checked ? grayScaleIcon : defaultIcon);
+    (chrome.action || chrome.browserAction).setIcon({
+        path: pauseCheckbox.checked ? grayScaleIcon : defaultIcon
+    });
 });
 
 const message_openJSON = (inMSG) => {
@@ -522,10 +524,11 @@ document.getElementById("predef-submit").addEventListener("click", async (e) => 
     } else {
         try {
             new URL(pathString);
-            getExtensionFile(pathString, "json", (result) => {
+            try {
+                const result = await getExtensionFile(pathString, "json");
                 if (typeof result === "object" && result !== null && ("name_match" in result || "domain_match" in result || "domain_regex" in result)) {
                     pathList.push(pathString);
-                    setStorageValue(pathList, chrome.storage.sync, "cblk_knowncookies");
+                    await setStorageValue(pathList, chrome.storage.sync, "cblk_knowncookies");
                     appendItemToList(pathString, "predef-paths", "cblk_knowncookies");
                     iElem.value = "";
                     iElem.style.color = "black";
@@ -534,10 +537,10 @@ document.getElementById("predef-submit").addEventListener("click", async (e) => 
                     console.log(`Retrieved file was not a JSON object.`);
                     handleError("inputErrorNoJSON");
                 }
-             }, (errorCode) => {
-                console.log(`Could not retrieve file, error code: ${errorCode}`);
+            } catch (error) {
+                console.log(`Could not retrieve file, error: ${error}`);
                 handleError("inputErrorNoResolve");
-            })
+            }
         } catch(error) {
             handleError("inputErrorNoResolve");
         }
