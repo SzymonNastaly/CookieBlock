@@ -8,6 +8,9 @@ Released under the MIT License, see included LICENSE file.
 */
 //-------------------------------------------------------------------------------
 
+// Import necessary functions from globals.js
+import { getExtensionFile, setStorageValue, getStorageValue } from '../modules/globals.js';
+
 // Use self instead of window for compatibility with service workers
 const global = self;
 
