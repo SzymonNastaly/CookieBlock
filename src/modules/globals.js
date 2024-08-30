@@ -119,27 +119,22 @@ export const setStorageValue = async function(newValue, stType, key, override = 
 * @param {Function} callback   Callback function that will be executed as soon as the data is available, receives data as first argument.
 */
 export const getExtensionFile = function(url, dtype, callback, errorCallback = null) {
-    const req = new XMLHttpRequest();
-
-    req.responseType = dtype;
-    req.onreadystatechange = function(event)
-    {
-        if (this.readyState === XMLHttpRequest.DONE)
-        {
-            if (this.status === 200) {
-                callback(this.response);
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            else {
-                console.error("Error -- could not retrieve data at (%s): %d (%s)", url, this.status, this.statusText);
-                if (errorCallback){
-                    errorCallback(this.status);
-                }
+            return dtype === 'json' ? response.json() : response.text();
+        })
+        .then(data => {
+            callback(data);
+        })
+        .catch(error => {
+            console.error(`Error -- could not retrieve data at (${url}): ${error.message}`);
+            if (errorCallback) {
+                errorCallback(error);
             }
-        }
-    };
-
-    req.open('GET', url, true);
-    req.send(null);
+        });
 };
 
 
