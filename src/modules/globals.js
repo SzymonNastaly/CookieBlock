@@ -63,7 +63,7 @@ const enableExtraOptions = false;
  * @param {String} key Unique storage key identifier
  * @param {Boolean} override If true, will override the existing value.
  */
-export const setStorageValue = async function(newValue, stType, key, override = true) {
+const setStorageValue = async function(newValue, stType, key, override = true) {
     let obj;
     if (override) {
         obj = {}; obj[key] = newValue;
@@ -88,7 +88,7 @@ export const setStorageValue = async function(newValue, stType, key, override = 
  * @param {*} key
  * @returns
  */
- export const getStorageValue = async function(stType, key) {
+ const getStorageValue = async function(stType, key) {
     // try to retrieve the value
     let value = undefined;
     try {
@@ -118,7 +118,7 @@ export const setStorageValue = async function(newValue, stType, key, override = 
 * @param {String} dtype        Type of the data. Examples: "json", "text", "binary"
 * @param {Function} callback   Callback function that will be executed as soon as the data is available, receives data as first argument.
 */
-export const getExtensionFile = function(url, dtype, callback, errorCallback = null) {
+const getExtensionFile = function(url, dtype, callback, errorCallback = null) {
     fetch(url)
         .then(response => {
             if (!response.ok) {
@@ -246,3 +246,20 @@ const setStaticLocaleText = (elemID, locID, args=[]) => {
 // default configuration
 var defaultConfig = undefined;
 getExtensionFile(chrome.runtime.getURL("/ext_data/default_config.json"), "json", (df)=> {defaultConfig = df});
+
+module.exports = {
+    defaultIcon,
+    grayScaleIcon,
+    enableExtraOptions,
+    setStorageValue,
+    getStorageValue,
+    getExtensionFile,
+    escapeString,
+    urlToUniformDomain,
+    domainRemoveNoise,
+    cleanDomain,
+    datetimeToExpiry,
+    classIndexToString,
+    setStaticLocaleText,
+    defaultConfig
+};
