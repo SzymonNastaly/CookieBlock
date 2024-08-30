@@ -8,46 +8,38 @@ Released under the MIT License, see included LICENSE file.
 */
 //-------------------------------------------------------------------------------
 
+// Use self instead of window for compatibility with service workers
+const global = self;
+
 // local counters for debugging
-var debug_httpRemovalCounter = 0;
-var debug_httpsRemovalCounter = 0;
-var debug_classifyAllCounter = [0, 0, 0, 0];
+let debug_httpRemovalCounter = 0;
+let debug_httpsRemovalCounter = 0;
+let debug_classifyAllCounter = [0, 0, 0, 0];
 
 // debug performance timers (FE, FE + Prediction)
-var debug_perfsum = [0.0, 0.0, 0.0];
-var debug_perfsum_squared = [0.0, 0.0, 0.0];
-var debug_maxTime = [0.0, 0.0, 0.0];
-var debug_minTime = [1e10, 1e10, 1e10];
+let debug_perfsum = [0.0, 0.0, 0.0];
+let debug_perfsum_squared = [0.0, 0.0, 0.0];
+let debug_maxTime = [0.0, 0.0, 0.0];
+let debug_minTime = [1e10, 1e10, 1e10];
 
-var debug_Ntotal = [0, 0, 0];
-var debug_Nskipped = 0;
+let debug_Ntotal = [0, 0, 0];
+let debug_Nskipped = 0;
 
 // Variables for all the user options, which is persisted in storage.local and storage.sync
 // Retrieving these from disk all the time is a bottleneck.
-var cblk_userpolicy = undefined;
-var cblk_pscale = undefined;
-var cblk_pause = undefined;
-var cblk_ulimit = undefined;
-var cblk_hconsent = undefined;
-var cblk_exglobal = undefined;
-var cblk_exfunc = undefined;
-var cblk_exanal = undefined;
-var cblk_exadvert = undefined;
-var cblk_mintime = undefined;
-var cblk_knowncookies = undefined;
-var cblk_useinternal = undefined;
+let cblk_userpolicy, cblk_pscale, cblk_pause, cblk_ulimit, cblk_hconsent, cblk_exglobal, 
+    cblk_exfunc, cblk_exanal, cblk_exadvert, cblk_mintime, cblk_knowncookies, cblk_useinternal;
 
 // lookup for known cookies, to prevent some critical login issues
 // will be imported form an external file and kept here
-var knownCookies_user = undefined;
-var knownCookies_internal = undefined;
+let knownCookies_user, knownCookies_internal;
 
 // key used to access the regular expression pattern in the known_cookies object
 const regexKey = "~regex;";
 
 // indexed DB for cookie history
-var historyDB = undefined;
-const openDBRequest = window.indexedDB.open("CookieBlockHistory", 1);
+let historyDB;
+const openDBRequest = global.indexedDB.open("CookieBlockHistory", 1);
 
 
 /**
@@ -797,3 +789,15 @@ chrome.runtime.onInstalled.addListener((details) => {
         chrome.tabs.create({"active": true, "url": "/options/cookieblock_setup.html"});
     }
 });
+
+// Service worker keep-alive
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message === 'keep-alive') {
+        sendResponse({status: 'alive'});
+    }
+});
+
+// Ensure the service worker stays active
+const keepAlive = () => setInterval(chrome.runtime.getPlatformInfo, 20e3);
+chrome.runtime.onStartup.addListener(keepAlive);
+keepAlive();
