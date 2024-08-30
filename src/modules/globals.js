@@ -63,7 +63,7 @@ const enableExtraOptions = false;
  * @param {String} key Unique storage key identifier
  * @param {Boolean} override If true, will override the existing value.
  */
-const setStorageValue = async function(newValue, stType, key, override = true) {
+export const setStorageValue = async function(newValue, stType, key, override = true) {
     let obj;
     if (override) {
         obj = {}; obj[key] = newValue;
@@ -88,7 +88,7 @@ const setStorageValue = async function(newValue, stType, key, override = true) {
  * @param {*} key
  * @returns
  */
- const getStorageValue = async function(stType, key) {
+ export const getStorageValue = async function(stType, key) {
     // try to retrieve the value
     let value = undefined;
     try {
@@ -118,7 +118,7 @@ const setStorageValue = async function(newValue, stType, key, override = true) {
 * @param {String} dtype        Type of the data. Examples: "json", "text", "binary"
 * @param {Function} callback   Callback function that will be executed as soon as the data is available, receives data as first argument.
 */
-const getExtensionFile = function(url, dtype, callback, errorCallback = null) {
+export const getExtensionFile = function(url, dtype, callback, errorCallback = null) {
     const req = new XMLHttpRequest();
 
     req.responseType = dtype;
