@@ -18,16 +18,9 @@
     "128": "/icons/cookieblock-128.png"
   },
 
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
 
-  "permissions": [
-    "cookies",
-    "storage",
-    "unlimitedStorage",
-    "activeTab"
-  ],
+  "permissions": ["cookies", "storage", "unlimitedStorage", "activeTab"],
 
   "background": {
     "service_worker": "/background/cookieblock_background.js",

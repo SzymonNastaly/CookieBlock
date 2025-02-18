@@ -7,6 +7,7 @@ This file is part of CookieBlock.
 Released under the MIT License, see included LICENSE file.
 */
 //-------------------------------------------------------------------------------
+import { setStaticLocaleText, getStorageValue, setStorageValue } from '../modules/globals.js';
 
 const histCheckbox = document.getElementById("history-consent-checkbox");
 const necessaryCheckbox = document.getElementById("nec_checkbox");
