@@ -108,7 +108,7 @@ export const getStorageValue = async function (stType, key) {
     } else {
       value = defaultConfig[key];
     }
-    setStorageValue(value, stType, key, (override = false));
+    setStorageValue(value, stType, key, false);
   }
   return value;
 };
@@ -155,7 +155,7 @@ export const escapeString = function (str) {
   if (typeof str != "string") {
     str = String(str);
   }
-  return unescape(encodeURIComponent(str));
+  return decodeURIComponent(encodeURIComponent(str));
 };
 
 /**

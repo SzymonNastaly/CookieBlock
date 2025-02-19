@@ -2,3 +2,6 @@
 .vscode/
 web-ext-artifacts
 .aider*
+.quick-lint-js.config
+.eslintrc.json
+.DS_Store

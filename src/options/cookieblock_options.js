@@ -15,6 +15,7 @@ import {
   grayScaleIcon,
   defaultIcon,
   cleanDomain,
+  getExtensionFile,
 } from "../modules/globals.js";
 
 // HTML elements
@@ -379,7 +380,7 @@ defaultButton.addEventListener("click", () => {
 clearButton.addEventListener("click", () => {
   chrome.runtime.sendMessage({ reset_storage: true }, (msg) => {
     if (chrome.runtime.lastError) {
-      console.error(err);
+      console.error(chrome.runtime.lastError);
       setStaticLocaleText("clear_applytext", "applyErrorText");
     } else {
       console.debug(msg.response);

@@ -930,7 +930,7 @@ const handleInternalMessage = function (request, sender, sendResponse) {
   } else if (request.update_label) {
     let updateContents = request.update_label;
     let updateCookieProcess = async () => {
-      actualCookie = await retrieveCookieFromStorage(updateContents);
+      let actualCookie = await retrieveCookieFromStorage(updateContents);
       actualCookie.label_ts = updateContents.label_ts;
       actualCookie.current_label = updateContents.current_label;
       insertCookieIntoStorage(actualCookie);

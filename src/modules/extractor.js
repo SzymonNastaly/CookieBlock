@@ -9,6 +9,8 @@ Released under the MIT License, see included LICENSE file.
 //-------------------------------------------------------------------------------
 import { getExtensionFile, urlToUniformDomain } from "./globals.js";
 import { LZString } from "./third_party/lz-string2.js";
+import { difflib } from "./third_party/difflib-browser2.js";
+import { Levenshtein } from "./third_party/levenshtein2.js";
 
 // Loaded in from a JSON file, stores the configuration on which features to extract from a cookie
 var feature_config;
@@ -660,7 +662,7 @@ const perUpdateFeatures = {
       sparse[curr_idx] = 1.0;
     } catch (error) {
       try {
-        decoded = atob(var_data["value"]);
+        const decoded = atob(var_data["value"]);
         JSON.parse(decoded);
         sparse[curr_idx] = 1.0;
       } catch (serror) {
@@ -713,7 +715,7 @@ const perUpdateFeatures = {
       jsobj = JSON.parse(cookieContent);
     } catch (error) {
       try {
-        decoded = atob(var_data["value"]);
+        const decoded = atob(var_data["value"]);
         jsobj = JSON.parse(decoded);
       } catch (serror) {}
     }
